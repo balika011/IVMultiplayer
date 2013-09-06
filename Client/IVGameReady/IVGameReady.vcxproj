@@ -40,7 +40,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)Build\</OutDir>
-    <IntDir>$(SolutionDir)\Build\temp\build_clientfilecopier\</IntDir>
+    <IntDir>$(SolutionDir)Build\temp\build_clientfilecopier\</IntDir>
+    <TargetName>IVGameReady</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)Build\</OutDir>
+    <IntDir>$(SolutionDir)Build\temp\build_clientfilecopier\</IntDir>
     <TargetName>IVGameReady</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -68,12 +73,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../Shared;../../Libraries;Libraries/zlib-1.2.5;../Libraries/zlib-1.2.5;../../Libraries/zlib-1.2.5;../;../../;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>../../Libraries/zlib-1.2.5/projects/Release</AdditionalLibraryDirectories>
+      <AdditionalDependencies>winmm.lib;ws2_32.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /Y "$(TargetDir)IVGameReady.exe" "$(SolutionDir)Files\IVGameReady.exe"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Shared\CLogFile.cpp" />
