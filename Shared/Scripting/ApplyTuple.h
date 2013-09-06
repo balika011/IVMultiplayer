@@ -96,16 +96,16 @@ T getValue(CScriptVM* pVM, int idx)
 template < uint32_t N >
 struct apply_obj_func
 {
-	template < typename T, typename R, typename... ArgsF, typename... ArgsT, typename... Args >
+	template < typename T, typename R, typename ArgsF, typename ArgsT, typename Args >
 	static R applyTuple(CScriptVM* pVM, T* pObj,
-		R (T::*f)( ArgsF... ),
-		const std::tuple<ArgsT...> &t,
-		Args... args )
+		R (T::*f)( ArgsF ),
+		const std::tuple<ArgsT> &t,
+		Args args )
 	{
-		const static int argCount = sizeof...(ArgsT);
+		const static int argCount = sizeof(ArgsT);
 		typedef typename std::remove_reference<decltype(std::get<N-1>(t))>::type ltype_const;
 		typedef typename std::remove_const<ltype_const>::type ltype;
-		return apply_obj_func<N-1>::applyTuple(pVM, pObj, f, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args... );
+		return apply_obj_func<N-1>::applyTuple(pVM, pObj, f, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args );
 	}
 };
 
@@ -123,13 +123,13 @@ struct apply_obj_func
 template <>
 struct apply_obj_func<0>
 {
-	template < typename T, typename R, typename... ArgsF, typename... ArgsT, typename... Args >
+	template < typename T, typename R, typename ArgsF, typename ArgsT, typename Args >
 	static R applyTuple(CScriptVM* pVM, T* pObj,
-		R (T::*f)( ArgsF... ),
-		const std::tuple<ArgsT...> &/* t */,
-		Args... args )
+		R (T::*f)( ArgsF ),
+		const std::tuple<ArgsT> &/* t */,
+		Args args )
 	{
-		return (pObj->*f)( args... );
+		return (pObj->*f)( args );
 	}
 };
 
@@ -139,12 +139,12 @@ struct apply_obj_func<0>
 * Object Function Call Forwarding Using Tuple Pack Parameters
 */
 // Actual apply function
-template < typename T, typename R, typename... ArgsF, typename... ArgsT >
+template < typename T, typename R, typename ArgsF, typename ArgsT >
 R applyTuple(CScriptVM* pVM, T* pObj,
-			 R (T::*f)( ArgsF... ),
-			 const std::tuple<ArgsT...> &t )
+			 R (T::*f)( ArgsF ),
+			 const std::tuple<ArgsT> &t )
 {
-	return apply_obj_func<sizeof...(ArgsT)>::applyTuple(pVM, pObj, f, std::forward<decltype(t)>(t) );
+	return apply_obj_func<sizeof(ArgsT)>::applyTuple(pVM, pObj, f, std::forward<decltype(t)>(t) );
 }
 
 //-----------------------------------------------------------------------------
@@ -164,15 +164,15 @@ typedef unsigned int uint;
 template < uint N >
 struct apply_func
 {
-	template < typename R, typename... ArgsF, typename... ArgsT, typename... Args >
-	static R applyTuple(CScriptVM *pVM, R (*f)( ArgsF... ),
-		const std::tuple<ArgsT...>& t,
-		Args... args )
+	template < typename R, typename ArgsF, typename ArgsT, typename Args >
+	static R applyTuple(CScriptVM *pVM, R (*f)( ArgsF ),
+		const std::tuple<ArgsT>& t,
+		Args args )
 	{
-		const static int argCount = sizeof...(ArgsT);
+		const static int argCount = sizeof(ArgsT);
 		typedef typename std::remove_reference<decltype(std::get<N-1>(t))>::type ltype_const;
 		typedef typename std::remove_const<ltype_const>::type ltype;
-		return apply_func<N-1>::applyTuple(pVM, f, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args... );
+		return apply_func<N-1>::applyTuple(pVM, f, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args );
 	}
 };
 
@@ -190,12 +190,12 @@ struct apply_func
 template <>
 struct apply_func<0>
 {
-	template < typename R, typename... ArgsF, typename... ArgsT, typename... Args >
-	static R applyTuple(CScriptVM *, R (*f)( ArgsF... ),
-		const std::tuple<ArgsT...>& /* t */,
-		Args... args )
+	template < typename R, typename ArgsF, typename ArgsT, typename Args >
+	static R applyTuple(CScriptVM *, R (*f)( ArgsF ),
+		const std::tuple<ArgsT>& /* t */,
+		Args args )
 	{
-		return f( args... );
+		return f( args );
 	}
 };
 
@@ -205,11 +205,11 @@ struct apply_func<0>
 * Static Function Call Forwarding Using Tuple Pack Parameters
 */
 // Actual apply function
-template < typename R, typename... ArgsF, typename... ArgsT >
-R applyTuple(CScriptVM *pVM, R (*f)(ArgsF...),
-			 const std::tuple<ArgsT...> & t )
+template < typename R, typename ArgsF, typename ArgsT >
+R applyTuple(CScriptVM *pVM, R (*f)(ArgsF),
+			 const std::tuple<ArgsT> & t )
 {
-	return apply_func<sizeof...(ArgsT)>::applyTuple(pVM, f, std::forward<decltype(t)>(t) );
+	return apply_func<sizeof(ArgsT)>::applyTuple(pVM, f, std::forward<decltype(t)>(t) );
 }
 
 //-----------------------------------------------------------------------------
@@ -230,14 +230,14 @@ R applyTuple(CScriptVM *pVM, R (*f)(ArgsF...),
 template <class C, uint N >
 struct apply_ctor_func
 {
-	template < typename... ArgsT, typename... Args >
-	static C *applyTuple(CScriptVM *pVM, const std::tuple<ArgsT...>& t,
-		Args... args )
+	template < typename ArgsT, typename Args >
+	static C *applyTuple(CScriptVM *pVM, const std::tuple<ArgsT>& t,
+		Args args )
 	{
-		const static int argCount = sizeof...(ArgsT);
+		const static int argCount = sizeof(ArgsT);
 		typedef typename std::remove_reference<decltype(std::get<N-1>(t))>::type ltype_const;
 		typedef typename std::remove_const<ltype_const>::type ltype;
-		return apply_ctor_func<C, N-1>::applyTuple(pVM, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args... );
+		return apply_ctor_func<C, N-1>::applyTuple(pVM, std::forward<decltype(t)>(t), getValue<ltype>(pVM, -(argCount-N+1)), args );
 	}
 };
 
@@ -255,11 +255,11 @@ struct apply_ctor_func
 template <class C>
 struct apply_ctor_func<C, 0>
 {
-	template < typename... ArgsT, typename... Args >
-	static C *applyTuple(CScriptVM *pVM,  const std::tuple<ArgsT...>& /* t */,
-		Args... args )
+	template < typename ArgsT, typename Args >
+	static C *applyTuple(CScriptVM *pVM,  const std::tuple<ArgsT>& /* t */,
+		Args args )
 	{
-		return new C( args... );
+		return new C( args );
 	}
 };
 
@@ -269,10 +269,10 @@ struct apply_ctor_func<C, 0>
 * ctor Function Call Forwarding Using Tuple Pack Parameters
 */
 // Actual apply function
-template < typename C, typename... ArgsT >
-C *applyTuple(CScriptVM *pVM, const std::tuple<ArgsT...> & t )
+template < typename C, typename ArgsT >
+C *applyTuple(CScriptVM *pVM, const std::tuple<ArgsT> & t )
 {
-	return apply_ctor_func<C, sizeof...(ArgsT)>::applyTuple(pVM, std::forward<decltype(t)>(t) );
+	return apply_ctor_func<C, sizeof(ArgsT)>::applyTuple(pVM, std::forward<decltype(t)>(t) );
 }
 
 #endif

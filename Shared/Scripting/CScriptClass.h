@@ -23,7 +23,7 @@ public:
 // This code is taken from scrbind a multi script binding library for Lua + Squirrel
 // https://github.com/Tomasu/LuaGlue
 
-template<typename _Ret, typename _Class, typename... _Args>
+template<typename _Ret, typename _Class, typename _Args>
 class CScriptMethod : public CScriptMethodBase
 {
 private:
@@ -31,7 +31,7 @@ private:
 public:
 	typedef _Class ClassType;
 	typedef _Ret ReturnType;
-	typedef _Ret(_Class::*MethodType)(_Args...);
+	typedef _Ret(_Class::*MethodType)(_Args);
 
 	CScriptMethod(const std::string &name, MethodType && fn) : name_(name), fn(std::forward<decltype(fn)>(fn))
 	{ }
@@ -94,27 +94,27 @@ public:
 		GET_SCRIPT_VM_SAFE;
 		if(pVM->GetVMType() == LUA_VM)
 		{
-			auto mimp = (CScriptMethod<_Ret, _Class, _Args...> *)pVM->GetUserData(lua_upvalueindex(1));
+			auto mimp = (CScriptMethod<_Ret, _Class, _Args> *)pVM->GetUserData(lua_upvalueindex(1));
 			return mimp->invoke(VM);
 		} else if(pVM->GetVMType() == SQUIRREL_VM) {
-			auto mimp = (CScriptMethod<_Ret, _Class, _Args...> *)pVM->GetUserData(-1);
+			auto mimp = (CScriptMethod<_Ret, _Class, _Args> *)pVM->GetUserData(-1);
 			return mimp->invoke(VM);
 		}
 		return 0;
 	}
 private:
 	MethodType fn;
-	std::tuple<_Args...> args;
-	static const unsigned int Arg_Count_ = sizeof...(_Args);
+	std::tuple<_Args> args;
+	static const unsigned int Arg_Count_ = sizeof(_Args);
 };
 
-template<typename _Class, typename... _Args>
-class CScriptMethod<void, _Class, _Args...> : public CScriptMethodBase
+template<typename _Class, typename _Args>
+class CScriptMethod<void, _Class, _Args> : public CScriptMethodBase
 {
 
 public:
 	typedef _Class ClassType;
-	typedef void (_Class::*MethodType)(_Args...);
+	typedef void (_Class::*MethodType)(_Args);
 };
 
 template<typename _Class>
@@ -134,34 +134,34 @@ public:
 
 	~CScriptClass() { }
 
-	template<typename _Ret, typename... _Args>
-	CScriptClass<_Class> &SetCtor(const std::string &name, _Ret(_Class::*fn)(_Args...))
+	template<typename _Ret, typename _Args>
+	CScriptClass<_Class> &SetCtor(const std::string &name, _Ret(_Class::*fn)(_Args))
 	{
-		m_pCtorMethod = new CScriptMethod<_Ret, _Class, _Args...>(name, std::forward<decltype(fn)>(fn));
+		m_pCtorMethod = new CScriptMethod<_Ret, _Class, _Args>(name, std::forward<decltype(fn)>(fn));
 
 		return *this;
 	}
 
-	template<typename... _Args>
-	CScriptClass<_Class> &SetCtor(const std::string &name, void (_Class::*fn)(_Args...))
+	template<typename _Args>
+	CScriptClass<_Class> &SetCtor(const std::string &name, void (_Class::*fn)(_Args))
 	{
-		m_pCtorMethod = new CScriptMethod<void, _Class, _Args...>(name, std::forward<decltype(fn)>(fn));
+		m_pCtorMethod = new CScriptMethod<void, _Class, _Args>(name, std::forward<decltype(fn)>(fn));
 		return *this;
 	}
 
-	template<typename _Ret, typename... _Args>
-	CScriptClass<_Class> &AddMethod(const std::string &name, _Ret(_Class::*fn)(_Args...))
+	template<typename _Ret, typename _Args>
+	CScriptClass<_Class> &AddMethod(const std::string &name, _Ret(_Class::*fn)(_Args))
 	{
-		auto impl = new CScriptMethod<_Ret, _Class, _Args...>(name, std::forward<decltype(fn)>(fn));
+		auto impl = new CScriptMethod<_Ret, _Class, _Args>(name, std::forward<decltype(fn)>(fn));
 		methods.push_back(impl);
 
 		return *this;
 	}
 
-	template<typename... _Args>
-	CScriptClass<_Class> &AddMethod(const std::string &name, void (_Class::*fn)(_Args...))
+	template<typename _Args>
+	CScriptClass<_Class> &AddMethod(const std::string &name, void (_Class::*fn)(_Args))
 	{
-		auto impl = new CScriptMethod<void, _Class, _Args...>(name, std::forward<decltype(fn)>(fn));
+		auto impl = new CScriptMethod<void, _Class, _Args>(name, std::forward<decltype(fn)>(fn));
 		methods.push_back(impl);
 
 		return *this;
