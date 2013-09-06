@@ -362,8 +362,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "Libraries\zlib-1.2.5\projects\zlib.vcxproj", "{9006D124-5D00-4CB7-BAD9-F527B19502C9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IVCore", "Client\IVCore\IVCore.vcxproj", "{56387735-7D4A-47AA-A885-09CCC5D5AA67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9006D124-5D00-4CB7-BAD9-F527B19502C9} = {9006D124-5D00-4CB7-BAD9-F527B19502C9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IVGameReady", "Client\IVGameReady\IVGameReady.vcxproj", "{CDEA73BD-6EF9-4407-843C-2728D07994A2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9006D124-5D00-4CB7-BAD9-F527B19502C9} = {9006D124-5D00-4CB7-BAD9-F527B19502C9}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IVMapEditor", "Client\IVMapEditor\IVMapEditor.vcxproj", "{11DCC6C3-E5AC-4867-821A-917A6F5DF976}"
 EndProject
