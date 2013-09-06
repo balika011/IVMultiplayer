@@ -28,7 +28,10 @@ bool CDirect3D9Hook::Install()
 {
 	if(!m_bHookInstalled)
 	{      
-		m_pfnDirect3DCreate9 = reinterpret_cast<Direct3DCreate9_t>(DetourFunction(DetourFindFunction ("D3D9.DLL", "Direct3DCreate9"),  reinterpret_cast<PBYTE>(Direct3DCreate9_Hook)));
+		m_pfnDirect3DCreate9 = (Direct3DCreate9_t)DetourFindFunction("D3D9.DLL", "Direct3DCreate9");
+		DetourTransactionBegin();
+		DetourAttach(&(PVOID&)m_pfnDirect3DCreate9, Direct3DCreate9_Hook);
+		DetourTransactionCommit();
 			
 		m_bHookInstalled = true;
         return true;
@@ -42,7 +45,9 @@ void CDirect3D9Hook::Uninstall()
     {
         if ( m_pfnDirect3DCreate9 )
 		{
-			DetourRemove ( reinterpret_cast < PBYTE > ( m_pfnDirect3DCreate9 ), reinterpret_cast < PBYTE > ( Direct3DCreate9_Hook ) );
+			DetourTransactionBegin();
+			DetourDetach(&(PVOID&)m_pfnDirect3DCreate9, Direct3DCreate9_Hook);
+			DetourTransactionCommit();
 		}
                         
         m_bHookInstalled = false;

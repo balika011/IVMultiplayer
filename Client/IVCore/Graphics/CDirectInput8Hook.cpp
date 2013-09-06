@@ -40,7 +40,10 @@ bool CDirectInput8Hook::Install( )
 		return false;
 
 	// Install the detour patch
-	m_pDirectInput8Create = ( DirectInput8Create_t ) DetourFunction( DetourFindFunction( "dinput8.dll", "DirectInput8Create" ), (PBYTE)DirectInput8Create__Hook );
+	m_pDirectInput8Create = (DirectInput8Create_t)DetourFindFunction("dinput8.dll", "DirectInput8Create");
+	DetourTransactionBegin();
+	DetourAttach(&(PVOID&)m_pDirectInput8Create, DirectInput8Create__Hook);
+	DetourTransactionCommit();
 
 	// Mark as installed
 	m_bInstalled = true;
@@ -55,7 +58,12 @@ void CDirectInput8Hook::Uninstall( )
 		return;
 
 	// Uninstall the detour patch
-	DetourRemove( (PBYTE)m_pDirectInput8Create, (PBYTE)DirectInput8Create__Hook );
+	if(m_pDirectInput8Create)
+	{
+		DetourTransactionBegin();
+		DetourDetach(&(PVOID&)m_pDirectInput8Create, DirectInput8Create__Hook);
+		DetourTransactionCommit();
+	}
 
 	// Mark as not installed
 	m_bInstalled = false;
