@@ -42,7 +42,7 @@ public:
 
 bool CLuaVM::LoadScript(CString script)
 {
-	//(new CScriptClass<Foo>("Foo"))->AddMethod("abc", &Foo::abc).AddMethod("new", &Foo::abc).Register(this);
+	(new CScriptClass<Foo>("Foo"))->AddMethod("abc", &Foo::abc).AddMethod("new", &Foo::abc).Register(this);
 	CString scriptPath( "%s/%s", GetResource()->GetResourceDirectoryPath().Get(), script.Get());
 	
 	if(!SharedUtility::Exists(script.Get()) && luaL_loadfile(m_pVM, scriptPath.Get()) != 0)
