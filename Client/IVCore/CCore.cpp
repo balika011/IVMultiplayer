@@ -124,7 +124,9 @@ bool CCore::Initialise()
 	CPatches::Initialize();
 	
 	// Setup the development instance
+#ifdef _DEBUG
 	m_pDevelopment->SetDebugView(true);
+#endif
 	
 	// Get loaded modules from our process
 	GetLoadedModulesList();
