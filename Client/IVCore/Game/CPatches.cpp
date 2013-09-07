@@ -19,74 +19,74 @@ _declspec(naked) void CTaskSimpleStartVehicle__Process()
 	_asm retn 4;
 }
 
-const char TLAD[] = "<ini>"
-				"<device>e1</device>"
-				"<content>"
-					"<name>The Lost and Damned Radio</name>"
-					"<id>1</id>"
-					"<audiometadata>e1_radio.xml</audiometadata>"
-					"<enabled />"
-				"</content>"
-				"<content>"
-					"<name>The Lost and Damned</name>"
-					"<id>2</id>" 
-					"<episode>2</episode>"
-					"<datfile>content.dat</datfile>"
-					"<audiometadata>e1_audio.xml</audiometadata>"
-					"<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>"
-					"<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
-					"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
-					"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
-					"<texturepath>pc/textures/</texturepath>"
-					"<!-- <enabled /> -->"
-				"</content>	"
-			"</ini>";
+const char TLAD [] = "<ini>\n"
+			"\t<device>e1</device>\n"
+			"\t<content>\n"
+				"\t\t<name>The Lost and Damned Radio</name>\n"
+				"\t\t<id>1</id>\n"
+				"\t\t<audiometadata>e1_radio.xml</audiometadata>\n"
+				"\t\t<enabled />\n"
+			"\t</content>\n"
+			"\t<content>\n"
+				"\t\t<name>The Lost and Damned</name>\n"
+				"\t\t<id>2</id>\n"
+				"\t\t<episode>1</episode>\n"
+				"\t\t<datfile>content.dat</datfile>\n"
+				"\t\t<audiometadata>e1_audio.xml</audiometadata>\n"
+				"\t\t<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>\n"
+				"\t\t<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>\n"
+				"\t\t<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>\n"
+				"\t\t<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>\n"
+				"\t\t<texturepath>pc/textures/</texturepath>\n"
+				"\t\t<!-- <enabled /> -->\n"
+			"\t</content>\n"
+		"</ini>\n";
 
-const char TBOGT[] = "<ini>"
-			"<device>e2</device>"	
-			"<content>"
-				"<name>The Ballad of Gay Tony</name>"
-				"<id>3</id>"
-				"<audiometadata>e2_radio.xml</audiometadata> "
-				"<enabled />"
-			"</content>"
-			"<content>"
-				"<name>The Ballad of Gay Tony</name>"
-				"<id>4</id>"
-				"<episode>1</episode>"
-				"<datfile>content.dat</datfile>"
-				"<audiometadata>e2_audio.xml</audiometadata>"
-				"<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>"
-				"<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
-				"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
-				"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
-				"<texturepath>pc/textures/</texturepath>"
-				"<!-- <enabled /> -->"
-			"</content>"
-		"</ini>";
+const char TBOGT[] = "<ini>\n"
+			"\t<device>e2</device>\n"
+			"\t<content>\n"
+				"\t\t<name>The Ballad of Gay Tony</name>\n"
+				"\t\t<id>3</id>\n"
+				"\t\t<audiometadata>e2_radio.xml</audiometadata>\n"
+				"\t\t<enabled />\n"
+			"\t</content>\n"
+			"\t<content>\n"
+				"\t\t<name>The Ballad of Gay Tony</name>\n"
+				"\t\t<id>4</id>\n"
+				"\t\t<episode>1</episode>\n"
+				"\t\t<datfile>content.dat</datfile>\n"
+				"\t\t<audiometadata>e2_audio.xml</audiometadata>\n"
+				"\t\t<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>\n"
+				"\t\t<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>\n"
+				"\t\t<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>\n"
+				"\t\t<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>\n"
+				"\t\t<texturepath>pc/textures/</texturepath>\n"
+				"\t\t<!-- <enabled /> -->\n"
+			"\t</content>\n"
+		"</ini>\n";
 
-const char setup3_xml[] = "setup3.xml";
+const char xml[] = "ivmp.xml";
 void CPatches::Initialize()
 {
-	/*char szInstallDirectory[MAX_PATH];
-	if(SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, REGISTRY_AREA, GAME_DIRECTORY, NULL, szInstallDirectory, sizeof(szInstallDirectory)) || SharedUtility::Exists(szInstallDirectory)) {
+	char szInstallDirectory[MAX_PATH];
+	if (SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, DEFAULT_REGISTRY_GAME_DIRECTORY, "InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) && SharedUtility::Exists(szInstallDirectory)) {
 		ofstream myfile;
-		myfile.open(CString("%s\\TBoGT\\%s", szInstallDirectory, setup3_xml).Get());
-		myfile << TBOGT;
+		myfile.open(CString("%s\\TLAD\\%s", szInstallDirectory, xml).Get());
+		myfile << TLAD;
 		myfile.close();
 
-		myfile.open(CString("%s\\TLAD\\%s", szInstallDirectory, setup3_xml).Get());
-		myfile << TLAD;
+		myfile.open(CString("%s\\TBoGT\\%s", szInstallDirectory, xml).Get());
+		myfile << TBOGT;
 		myfile.close();
 
 	}
 
 	// Patch setup files
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD)setup3_xml);
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD)setup3_xml);
-
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD) xml); //TLAD
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD) xml); //TBoGT
+	
 	// Skip main menu #1
-	*(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
+	/**(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
 
 	// Skip main menu #2
 	CPatcher::InstallJmpPatch(COffsets::CGame_Process__Sleep, COffsets::CGame_Process_InitialiseRageGame);*/
