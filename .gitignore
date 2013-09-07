@@ -20,6 +20,7 @@
 *.suo
 ipch/
 /Libraries/zlib-1.2.5/projects/Debug
+/Libraries/zlib-1.2.5/projects/Release
 /Build
 /Files
 /Private

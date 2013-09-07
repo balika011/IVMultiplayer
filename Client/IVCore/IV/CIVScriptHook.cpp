@@ -520,7 +520,7 @@ void CRageThread_Script_Process()
 bool g_startupProcessed = false;
 bool bPostStartupLoaded = false;
 
-int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDX, int EDIp)
+int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDXp, int EDIp)
 {
 	bool bScriptFound = false;
 
