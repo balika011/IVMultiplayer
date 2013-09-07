@@ -19,29 +19,6 @@ _declspec(naked) void CTaskSimpleStartVehicle__Process()
 	_asm retn 4;
 }
 
-const char TLAD [] = "<ini>\n"
-			"\t<device>e1</device>\n"
-			"\t<content>\n"
-				"\t\t<name>The Lost and Damned Radio</name>\n"
-				"\t\t<id>1</id>\n"
-				"\t\t<audiometadata>e1_radio.xml</audiometadata>\n"
-				"\t\t<enabled />\n"
-			"\t</content>\n"
-			"\t<content>\n"
-				"\t\t<name>The Lost and Damned</name>\n"
-				"\t\t<id>2</id>\n"
-				"\t\t<episode>1</episode>\n"
-				"\t\t<datfile>content.dat</datfile>\n"
-				"\t\t<audiometadata>e1_audio.xml</audiometadata>\n"
-				"\t\t<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>\n"
-				"\t\t<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>\n"
-				"\t\t<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>\n"
-				"\t\t<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>\n"
-				"\t\t<texturepath>pc/textures/</texturepath>\n"
-				"\t\t<!-- <enabled /> -->\n"
-			"\t</content>\n"
-		"</ini>\n";
-
 const char TBOGT[] = "<ini>\n"
 			"\t<device>e2</device>\n"
 			"\t<content>\n"
@@ -71,10 +48,6 @@ void CPatches::Initialize()
 	char szInstallDirectory[MAX_PATH];
 	if (SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, DEFAULT_REGISTRY_GAME_DIRECTORY, "InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) && SharedUtility::Exists(szInstallDirectory)) {
 		ofstream myfile;
-		myfile.open(CString("%s\\TLAD\\%s", szInstallDirectory, xml).Get());
-		myfile << TLAD;
-		myfile.close();
-
 		myfile.open(CString("%s\\TBoGT\\%s", szInstallDirectory, xml).Get());
 		myfile << TBOGT;
 		myfile.close();
@@ -82,9 +55,14 @@ void CPatches::Initialize()
 	}
 
 	// Patch setup files
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD) xml); //TLAD
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD) xml); //TBoGT
-	
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD) xml);
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD) xml);
+
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x81A789, g_pCore->GetBase() + 0xD5C91C);//TLAD logo to EFLC logo
+	*(BYTE *) (g_pCore->GetBase() + 0x81A7C8) = 2; //Disable TLAD in main menu
+
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x81A79A, g_pCore->GetBase() + 0xD5C910); //TBoGT logo to IV logo
+
 	// Skip main menu #1
 	/**(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
 
