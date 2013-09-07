@@ -19,63 +19,77 @@ _declspec(naked) void CTaskSimpleStartVehicle__Process()
 	_asm retn 4;
 }
 
-const char TLAD[] = "<ini><device>e1</device><content><name>The Lost and Damned Radio</name><id>1</id><audiometadata>e1_radio.xml</audiometadata><enabled /></content>	<content><name>The Lost and Damned</name><id>2</id>" 
-		"<episode>2</episode><datfile>content.dat</datfile><audiometadata>e1_audio.xml</audiometadata><loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens><loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
-		"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
-		"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
-		"<texturepath>pc/textures/</texturepath>"
-		"<!-- <enabled /> -->"
-		"</content>	"
-		"</ini>";
+const char TLAD[] = "<ini>"
+				"<device>e1</device>"
+				"<content>"
+					"<name>The Lost and Damned Radio</name>"
+					"<id>1</id>"
+					"<audiometadata>e1_radio.xml</audiometadata>"
+					"<enabled />"
+				"</content>"
+				"<content>"
+					"<name>The Lost and Damned</name>"
+					"<id>2</id>" 
+					"<episode>2</episode>"
+					"<datfile>content.dat</datfile>"
+					"<audiometadata>e1_audio.xml</audiometadata>"
+					"<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>"
+					"<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
+					"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
+					"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
+					"<texturepath>pc/textures/</texturepath>"
+					"<!-- <enabled /> -->"
+				"</content>	"
+			"</ini>";
 
 const char TBOGT[] = "<ini>"
-	"<device>e2</device>"	
-	"<content>"
-		"<name>The Ballad of Gay Tony</name>"
-		"<id>3</id>"
-		"<audiometadata>e2_radio.xml</audiometadata> "
-		"<enabled />"
-	"</content>"
-	"<content>"
-		"<name>The Ballad of Gay Tony</name>"
-		"<id>4</id>"
-		"<episode>1</episode>"
-		"<datfile>content.dat</datfile>"
-		"<audiometadata>e2_audio.xml</audiometadata>"
-		"<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>"
-		"<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
-		"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
-		"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
-		"<texturepath>pc/textures/</texturepath>"
-		"<!-- <enabled /> -->"
-	"</content>"
-"</ini>";
+			"<device>e2</device>"	
+			"<content>"
+				"<name>The Ballad of Gay Tony</name>"
+				"<id>3</id>"
+				"<audiometadata>e2_radio.xml</audiometadata> "
+				"<enabled />"
+			"</content>"
+			"<content>"
+				"<name>The Ballad of Gay Tony</name>"
+				"<id>4</id>"
+				"<episode>1</episode>"
+				"<datfile>content.dat</datfile>"
+				"<audiometadata>e2_audio.xml</audiometadata>"
+				"<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>"
+				"<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>"
+				"<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>"
+				"<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>"
+				"<texturepath>pc/textures/</texturepath>"
+				"<!-- <enabled /> -->"
+			"</content>"
+		"</ini>";
 
-const char setu[] = "setup3.xml";
+const char setup3_xml[] = "setup3.xml";
 void CPatches::Initialize()
 {
-	char szInstallDirectory[MAX_PATH];
-	if(SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, REGISTRY_AREA, GAME_DIRECTORY, NULL,szInstallDirectory, sizeof(szInstallDirectory)) || SharedUtility::Exists(szInstallDirectory)) {
+	/*char szInstallDirectory[MAX_PATH];
+	if(SharedUtility::ReadRegistryString(HKEY_CURRENT_USER, REGISTRY_AREA, GAME_DIRECTORY, NULL, szInstallDirectory, sizeof(szInstallDirectory)) || SharedUtility::Exists(szInstallDirectory)) {
 		ofstream myfile;
-		myfile.open(CString("%s\\TBoGT\\setup3.xml", szInstallDirectory).Get());
+		myfile.open(CString("%s\\TBoGT\\%s", szInstallDirectory, setup3_xml).Get());
 		myfile << TBOGT;
 		myfile.close();
 
-		myfile.open(CString("%s\\TLAD\\setup3.xml", szInstallDirectory).Get());
+		myfile.open(CString("%s\\TLAD\\%s", szInstallDirectory, setup3_xml).Get());
 		myfile << TLAD;
 		myfile.close();
 
 	}
 
 	// Patch setup files
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD)setu);
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD)setu);
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD)setup3_xml);
+	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD)setup3_xml);
 
 	// Skip main menu #1
 	*(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
 
 	// Skip main menu #2
-	CPatcher::InstallJmpPatch(COffsets::CGame_Process__Sleep, COffsets::CGame_Process_InitialiseRageGame);
+	CPatcher::InstallJmpPatch(COffsets::CGame_Process__Sleep, COffsets::CGame_Process_InitialiseRageGame);*/
 
 	// Return at start of CTaskSimplePlayRandomAmbients::ProcessPed (Disable random ambient animations)
 	*(DWORD *)COffsets::IV_Hook__PatchRandomTasks = 0x900004C2;
@@ -115,16 +129,16 @@ void CPatches::Initialize()
 	// === RAGE %% RGSC Stuff
 
     // Don't initialize error reporting
-    CPatcher::InstallRetnPatch(COffsets::IV_Hook__PatchErrorReporting);
+	CPatcher::InstallRetnPatch(COffsets::IV_Hook__PatchErrorReporting);
 
     // Certificates check (RETN 8)
     *(DWORD *)COffsets::IV_Hook__PatchCertificatesCheck = 0x900008C2;
 
     // xor eax, eax - address of the RGSC object
-    *(DWORD *)COffsets::IV_Hook__PatchRGSCObject = 0x4AE9C033;
+	*(DWORD *)COffsets::IV_Hook__PatchRGSCObject = 0x4AE9C033;
 
     // Skip RGSC connect and EFC checks (jmp 40289E)
-    *(DWORD *)COffsets::IV_Hook__PatchRGSCEFCChecks = 0x90000002;
+	*(DWORD *)COffsets::IV_Hook__PatchRGSCEFCChecks = 0x90000002;
 
     // NOP; MOV [g_rgsc], eax
     *(WORD *)COffsets::IV_Hook__PatchFakeRGSCObject= 0xA390;
@@ -139,8 +153,8 @@ void CPatches::Initialize()
     CPatcher::InstallNopPatch(COffsets::IV_Hook__PatchMissingTests1, 14);
     CPatcher::InstallNopPatch(COffsets::IV_Hook__PatchMissingTests2, 14);
 
-    *(DWORD *)COffsets::IV_Hook__PatchUnkownAddress1 = 0x90CC033; // xor eax, eax; retn
-    *(DWORD *)COffsets::IV_Hook__PatchUnkownAddress2 = 0x90CC033; // xor eax, eax; retn
+	*(DWORD *)COffsets::IV_Hook__PatchUnkownAddress1 = 0x90CC033; // xor eax, eax; retn
+	*(DWORD *)COffsets::IV_Hook__PatchUnkownAddress2 = 0x90CC033; // xor eax, eax; retn
 
     // Disable securom spot checks (mov al, 1; retn)
     *(DWORD *)COffsets::IV_Hook__PatchSecuromCheck = 0x90C301B0;
