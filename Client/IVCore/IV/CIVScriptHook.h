@@ -52,10 +52,20 @@ struct sSRCThread_Content
 	unsigned int _f50;			// 50-54 field_50    dd ?
 };
 
+class VFTable
+{
+public:
+	DWORD sub_C2B830;
+	DWORD sub_4CE5F0;
+	DWORD sub_4CCD50;
+	DWORD Process;
+	DWORD sub_C2B900;
+};
+
 class sSRCThread
 {
 public:	
-	DWORD m_dwVFTable;              // 00-04 _vmt        dd ?
+	VFTable* m_VFTable;              // 00-04 _vmt        dd ?
 	sSRCThread_Content m_Context;		// 04-58 m_Context   scrThreadContext ?
 	void * m_pStack;					// 58-5C m_pStack    dd ?
 	unsigned int _f5C;				// 5C-60 field_5C    dd ?

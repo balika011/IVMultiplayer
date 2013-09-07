@@ -518,216 +518,195 @@ void CRageThread_Script_Process()
 }
 
 bool g_startupProcessed = false;
-DWORD CScriptVM_Process_JmpBack = 0;
-sRAGETHREAD * thread = 0;
-int i = 0;
 bool bPostStartupLoaded = false;
-bool bScriptFound = false;
-void _declspec(naked) CScriptVM__Process()
+
+int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDX, int EDIp)
 {
-	_asm	mov thread, ecx;
-	_asm	pushad;
+	bool bScriptFound = false;
 
-	// Set jumpout default
-	CScriptVM_Process_JmpBack = g_pCore->GetBase() + 0x4CE0C6;
-
-	switch(thread->m_Context.ScriptHash)
+	switch (thread->m_Context.ScriptHash)
 	{
-		case 0x8C56D5FD: // initial
+	case 0x8C56D5FD: // initial
 		{
 			g_startupProcessed = true;
 			bScriptFound = true;
 			break;
 		}
-		case 0x27EB33D7: // main
+	case 0x27EB33D7: // main
 		{
 			bScriptFound = true;
-			if(g_startupProcessed)
+			if (g_startupProcessed)
 			{
-				bScriptFound = true;
-				CScriptVM_Process_JmpBack = g_pCore->GetBase() + 0x4CE0CD;
-				_asm	popad;
-				_asm	jmp [CScriptVM_Process_JmpBack];
+				return 2;
 			}
 			break;
 		}
-	}
-	
-	//CLogFile::Printf("%d, %d",ARRAY_LENGTH(civScripts), i);
-	
-	// Check if we can match 
-	if(thread->m_Context.ScriptHash == 0x8C56D5FD || thread->m_Context.ScriptHash == 0x27EB33D7 || thread->m_Context.ScriptHash == 0x41D6F794) { }
-	else 
-	{
-		while(i < ARRAY_LENGTH(civScripts))
+	case 0x41D6F794:
 		{
-			if(civScripts[i].dwScriptHash == thread->m_Context.ScriptHash) {
-				bScriptFound = true;
-				switch(civScripts[i].iSlotID)
-				{
-					case 7:
-					case 8:
-					case 9:
-					case 10:
-					//case 11:
-					case 12:
-					case 13:
-					case 14:
-					case 15:
-					//case 16:
-					case 17: 
-					case 18: 
-					case 19: 
-					//case 20: 
-					case 21: 
-					case 22: 
-					case 23: 
-					case 24: 
-					case 25: 
-					case 26: 
-					case 27: 
-					case 28: 
-					case 29: 
-					case 30: 
-					case 31: 
-					case 32: 
-					case 33: 
-					case 34: 
-					case 35: 
-					case 36: 
-					case 37: 
-					case 38: 
-					//case 39: 
-					//case 40: 
-					//case 41: 
-					//case 42: 
-					//case 43: 
-					//case 44: 
-					//case 45: 
-					//case 46: 
-					case 47: 
-					case 48: 
-					case 49: 
-					case 50: 
-					case 51: 
-					case 52: 
-					case 53: 
-					case 54: 
-					case 55: 
-					case 56: 
-					case 57: 
-					case 58: 
-					case 59: 
-					case 60: 
-					case 61: 
-					case 62: 
-					case 68: 
-					case 69: 
-					case 70: 
-					case 114: 
-					case 115: 
-					case 116: 
-					case 117: 
-					case 118: 
-					case 119: 
-					case 127: 
-					case 152: 
-					case 153: 
-					case 160: 
-					case 161: 
-					case 183: 
-					case 184: 
-					case 185: 
-					case 206: 
-					case 220: 
-					case 230: 
-					case 231: 
-					case 234: 
-					case 235: 
-					case 236: 
-					case 237: 
-					case 238: 
-					case 241: 
-					case 244: 
-					case 270: 
-					case 271: 
-					case 281: 
-					case 288: 
-					case 295: 
-					case 309: 
-					case 310: 
-					case 311: 
-					case 312: 
-					case 313: 
-					case 314: 
-					case 315: 
-					case 316: 
-					case 317: 
-					case 331: 
-					case 332: 
-					case 333: 
-					case 334: 
-					case 341: 
-					case 342: 
-					case 376: 
-					case 377: 
-					case 378: 
-					case 387: 
-					case 392: 
-					case 395: 
-					case 398: 
-					case 399: 
-					case 400: 
-					case 423: 
-					case 424: 
-					case 425: 
-					case 426: 
-					case 432: 
-					case 464:
-					{
-						//CLogFile::Printf("Process script %s",civScripts[i].strScriptName.Get());
-						break;
-					}
-					default:
-					{
-						//CLogFile::Printf("Ignore script %s",civScripts[i].strScriptName.Get());
-
-						CScriptVM_Process_JmpBack = g_pCore->GetBase() + 0x4CE0CD;
-						_asm	popad;
-						_asm	jmp CScriptVM_Process_JmpBack;
-						break;
-					}
-				}
-			}
-			i++;
+			bScriptFound = true;
+			break;
 		}
 	}
 
-	if(!bScriptFound)
-		CLogFile::Printf("[%s] Processing unkown script 0x%p[%s]",__FUNCTION__, thread->m_Context.ScriptHash, thread->m_szProgramName);
+	// Check if we can match 
+	if (thread->m_Context.ScriptHash != 0x8C56D5FD && thread->m_Context.ScriptHash != 0x27EB33D7 && thread->m_Context.ScriptHash != 0x41D6F794)
+	{
+		for (int i = 0; i < ARRAY_LENGTH(civScripts); ++i)
+		{
+			if (civScripts[i].dwScriptHash == thread->m_Context.ScriptHash) {
+				bScriptFound = true;
+				switch (civScripts[i].iSlotID)
+				{
+				case 7:
+				case 8:
+				case 9:
+				case 10:
+				//case 11:
+				case 12:
+				case 13:
+				case 14:
+				case 15:
+				//case 16:
+				case 17:
+				case 18:
+				case 19:
+				//case 20: 
+				case 21:
+				case 22:
+				case 23:
+				case 24:
+				case 25:
+				case 26:
+				case 27:
+				case 28:
+				case 29:
+				case 30:
+				case 31:
+				case 32:
+				case 33:
+				case 34:
+				case 35:
+				case 36:
+				case 37:
+				case 38:
+				//case 39: 
+				//case 40: 
+				//case 41: 
+				//case 42: 
+				//case 43: 
+				//case 44: 
+				//case 45: 
+				//case 46: 
+				case 47:
+				case 48:
+				case 49:
+				case 50:
+				case 51:
+				case 52:
+				case 53:
+				case 54:
+				case 55:
+				case 56:
+				case 57:
+				case 58:
+				case 59:
+				case 60:
+				case 61:
+				case 62:
+				case 68:
+				case 69:
+				case 70:
+				case 114:
+				case 115:
+				case 116:
+				case 117:
+				case 118:
+				case 119:
+				case 127:
+				case 152:
+				case 153:
+				case 160:
+				case 161:
+				case 183:
+				case 184:
+				case 185:
+				case 206:
+				case 220:
+				case 230:
+				case 231:
+				case 234:
+				case 235:
+				case 236:
+				case 237:
+				case 238:
+				case 241:
+				case 244:
+				case 270:
+				case 271:
+				case 281:
+				case 288:
+				case 295:
+				case 309:
+				case 310:
+				case 311:
+				case 312:
+				case 313:
+				case 314:
+				case 315:
+				case 316:
+				case 317:
+				case 331:
+				case 332:
+				case 333:
+				case 334:
+				case 341:
+				case 342:
+				case 376:
+				case 377:
+				case 378:
+				case 387:
+				case 392:
+				case 395:
+				case 398:
+				case 399:
+				case 400:
+				case 423:
+				case 424:
+				case 425:
+				case 426:
+				case 432:
+				case 464:
+					{
+						//CLogFile::Printf("Process script %s[%s]", civScripts[i].strScriptName.Get(), thread->m_szProgramName);
+						break;
+					}
+				default:
+					{
+						//CLogFile::Printf("Ignore script %s[%s]", civScripts[i].strScriptName.Get(), thread->m_szProgramName);
 
-	// Restore default
-	i = 0;
-	bScriptFound = false;
+						return 2;
+					}
+				}
+			}
+		}
+	}
 
-	_asm	popad;
-	_asm	mov edx, [ecx];
-	_asm	mov eax, [edx+0Ch];
-	_asm	push edi;
-	_asm	call eax;
-	_asm	pushad;
+	if (!bScriptFound)
+		CLogFile::Printf("[%s] Processing unknown script 0x%p[%s]", __FUNCTION__, thread->m_Context.ScriptHash, thread->m_szProgramName);
+
+	int ret = (*(int (__thiscall *)(sRAGETHREAD *, int)) thread->m_VFTable->Process)(thread, EDIp);
 
 	// Post Process our stuff
-	switch(thread->m_Context.ScriptHash)
+	switch (thread->m_Context.ScriptHash)
 	{
-		case 0x41D6F794:
+	case 0x41D6F794:
 		{
-			if(bPostStartupLoaded)
+			if (bPostStartupLoaded)
 				break;
-			
+
 			CLogFile::Printf("PostProcess startup.sco!");
 
-			bPostStartupLoaded = !bPostStartupLoaded;
+			bPostStartupLoaded = true;
 
 			CIVScript::AllocateScriptToObject("puzzle_launcher", 691499124, 100, 10.00000000, -1);
 			CIVScript::AllocateScriptToObject("puzzle_launcher", -386570734, 100, 10.00000000, -1);
@@ -828,25 +807,16 @@ void _declspec(naked) CScriptVM__Process()
 			break;
 		}
 	}
-	
-	_asm	popad;
-	_asm	jmp CScriptVM_Process_JmpBack;
 
-	//*(sRAGETHREAD **)COffsets::VAR_ScrVM__ActiveThread = g_pRageScriptThread;
+	return ret;
 }
-sRAGETHREAD* g_pOldScriptThread = 0;
+
 void _declspec(naked) CScriptVM_Prcoess_End()
 {
 	_asm	pushad;
-
-	//g_pOldScriptThread = *(sRAGETHREAD**)(g_pCore->GetBase() + 0x16EAD50);
-	//*(sRAGETHREAD**)(g_pCore->GetBase() + 0x16EAD50) = g_pRageScriptThread;
-
 	CRageThread_Script_Process();
-
-	//*(sRAGETHREAD**)(g_pCore->GetBase() + 0x16EAD50) = g_pOldScriptThread;
-
 	_asm	popad;
+
 	_asm	pop esi;
 	_asm	mov al, bl;
 	_asm	pop ebx;
@@ -855,7 +825,6 @@ void _declspec(naked) CScriptVM_Prcoess_End()
 
 __declspec(naked) int GetRunningScriptThread()
 {
-	//CLogFile::Printf("%s",__FUNCTION__);
 	_asm mov eax, g_pRageScriptThread;
 	_asm retn;
 }
@@ -868,7 +837,10 @@ void CIVScriptingHook::InstallScriptHooks()
 	bScriptProcssSwitch = false;
 
 	// Hook CScriptVM Process
-	CPatcher::InstallJmpPatch(g_pCore->GetBase() + 0x4CE0BE, (DWORD)CScriptVM__Process);
+	*(BYTE*)(g_pCore->GetBase() + 0x4CE0BE) = 0x57; //push edi
+	CPatcher::InstallCallPatch(g_pCore->GetBase() + 0x4CE0BF, (DWORD) CScriptVM__Process);
+	*(WORD*)(g_pCore->GetBase() + 0x4CE0C4) = 0x9090; //nop; nop
+
 	CPatcher::InstallJmpPatch(g_pCore->GetBase() + 0x4CE0DC, (DWORD)CScriptVM_Prcoess_End);
 
 	// Disable check to invalid threads
