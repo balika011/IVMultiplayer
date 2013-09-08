@@ -28,9 +28,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{85B22A
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Network.Core", "Network\Core\Network.Core.vcxproj", "{766B64D1-3EE0-42C3-A69A-D1293FE90524}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9006D124-5D00-4CB7-BAD9-F527B19502C9} = {9006D124-5D00-4CB7-BAD9-F527B19502C9}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server.Core", "Server\Server.Core.vcxproj", "{5AD2BD08-FCBD-474F-AECD-F9ACDA0A2031}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -359,6 +356,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ZLib_files", "ZLib_files", 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Compressor", "Client\Compressor\Client.Compressor.vcxproj", "{FAE2902E-34E5-40A9-ACA7-4C01518EF4CC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9006D124-5D00-4CB7-BAD9-F527B19502C9} = {9006D124-5D00-4CB7-BAD9-F527B19502C9}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{53F1CF06-78F8-47EA-95AB-4DB34DA24409}"
 EndProject
