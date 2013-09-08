@@ -43,10 +43,19 @@ UINT_PTR WINAPI SetTimer_Hook(HWND hWnd, UINT_PTR nIDEvent, UINT uElapse, TIMERP
 	return g_pfnSetTimer(hWnd, nIDEvent, 0, lpTimerFunc);
 }
 
+wchar_t *GetWC(const char *c)
+{
+    size_t cSize = strlen(c)+1;
+    wchar_t* wc = new wchar_t[cSize];
+    mbstowcs (wc, c, cSize);
+
+    return wc;
+}
+
 BOOL WINAPI CreateProcessW_Hook(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, LPSECURITY_ATTRIBUTES lpProcessAttributes, LPSECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCWSTR lpCurrentDirectory, LPSTARTUPINFOA lpStartupInfo, LPPROCESS_INFORMATION lpProcessInformation)
 {
-	// If this is not a call to start the 'EFLC.exe' process then just call the original CreateProcessW
-	if(wcscmp(lpApplicationName, L"EFLC.exe"))
+	// If this is not a call to start the 'GTAIV.exe' process then just call the original CreateProcessW
+	if(wcscmp(lpApplicationName, GetWC(GAME_DEFAULT_EXECUTABLE)))
 		return g_pfnCreateProcessW(lpApplicationName, lpCommandLine, lpProcessAttributes, lpThreadAttributes, bInheritHandles, dwCreationFlags, lpEnvironment, lpCurrentDirectory, lpStartupInfo, lpProcessInformation);
 
 	// Set the CREATE_SUSPENDED flag in the creation flags
@@ -97,11 +106,11 @@ BOOL WINAPI CreateProcessW_Hook(LPCWSTR lpApplicationName, LPWSTR lpCommandLine,
 	}
 
 	// Get the full path to GTAIV.exe
-	CString strApplicationPath("%s\\EFLC.exe", szInstallDirectory);
+	CString strApplicationPath("%s\\%s", szInstallDirectory, GAME_DEFAULT_EXECUTABLE);
 
 	// Make sure the GTAIV.exe path is valid
 	if(!SharedUtility::Exists(strApplicationPath.Get()))
-		return ShowMessageBox("Failed to find "GAME_START_EXECUTABLE". Cannot launch "MOD_NAME".");
+		return ShowMessageBox("Failed to find "GAME_DEFAULT_EXECUTABLE". Cannot launch "MOD_NAME".");
 
 	// If we have a custom directory save it
 	if(bFoundCustomDirectory)

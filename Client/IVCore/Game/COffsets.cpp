@@ -38,6 +38,7 @@ INIT_OFF(VAR_MenuActive_2);
 // Script
 INIT_OFF(FUNC_GetRunningScriptThread);
 INIT_OFF(CALL_CScriptVM__Process);
+INIT_OFF(CALL_GetRunningScriptThread);
 INIT_OFF(VAR_ScrVM__ThreadPool);
 INIT_OFF(VAR_ScrVM__ActiveThread);
 INIT_OFF(FUNC_ScrVM__FindNativeAddress);
@@ -396,6 +397,7 @@ INIT_OFF(IV_Func__DeletePedTaskJump);
 INIT_OFF(IV_FUNC__TaskPedJump);
 INIT_OFF(IV_Func__MovePedToPositionInterpolated);
 
+INIT_OFF(VAR_GameWindow);
 
 enum ePATCH_SIG
 {
@@ -427,7 +429,7 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(VAR_IPedDataNY, 0xE9B124); // done
 			SET_OFF(FUNC_CPedMoveBlendOnFoot__Constructor, 0xA24D90); // done
 			SET_OFF(FUNC_NEW_CPedData, __noop); // not needed
-			SET_OFF(CALL_StartLoadingTune, 0x492D20); // DONE
+			SET_OFF(CALL_StartLoadingTune, 0x492E67); // DONE //0x492D20
 			SET_OFF(VAR_NumberOfParkedCars, __noop); // not needed
 
 			SET_OFF(FUNC_CEpisodes__IsEpisodeAvaliable,  __noop); // removed
@@ -453,8 +455,9 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(VAR_MenuActive_2, 0x104E11F); // done
 
 			//Script
-			SET_OFF(FUNC_GetRunningScriptThread, 0x4CCD20); // done 
-			SET_OFF(CALL_CScriptVM__Process, 0x8346A2); // done
+			SET_OFF(FUNC_GetRunningScriptThread, 0x4CCD20); // done
+			SET_OFF(CALL_CScriptVM__Process, 0x4CE0BE); // done //0x8346A2
+			SET_OFF(CALL_GetRunningScriptThread, 0x82E7E0); // done
 			SET_OFF(VAR_ScrVM__ThreadPool, 0x186595C); // done
 			SET_OFF(VAR_ScrVM__ActiveThread, 0x16EAD50); // done
 			SET_OFF(FUNC_ScrVM__FindNativeAddress, 0x4CF760); // done
@@ -814,6 +817,8 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(IV_Func__DeletePedTaskJump, 0xBF54C0); // done
 			SET_OFF(IV_FUNC__TaskPedJump, 0xBF5600); // done
 			SET_OFF(IV_Func__MovePedToPositionInterpolated, 0xBF6060); // done
+
+			SET_OFF(VAR_GameWindow, 0x1849DD4); //done
 			break;
 		}
 		case IV_107:
@@ -849,7 +854,8 @@ void COffsets::Initialize(unsigned int uiBase)
 
 			//Script
 			SET_OFF(FUNC_GetRunningScriptThread, 0x5A4CA0);
-			SET_OFF(CALL_CScriptVM__Process, 0x80A092);
+			SET_OFF(CALL_CScriptVM__Process, 0x5A603E); //0x80A092
+			SET_OFF(CALL_GetRunningScriptThread, 0x804230);
 			SET_OFF(VAR_ScrVM__ThreadPool, 0x1983310);
 			SET_OFF(VAR_ScrVM__ActiveThread, 0x1849AE0);
 			SET_OFF(FUNC_ScrVM__FindNativeAddress, 0x5A76D0);
@@ -1209,6 +1215,7 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(IV_FUNC__TaskPedJump, 0xB86A20);
 			SET_OFF(IV_Func__MovePedToPositionInterpolated, 0xB87480);
 
+			SET_OFF(VAR_GameWindow, 0x18AAD44);
 			break;
 		default:
 			break;

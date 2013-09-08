@@ -75,6 +75,7 @@ public:
 	// Script
 	DEF_OFF(FUNC_GetRunningScriptThread);
 	DEF_OFF(CALL_CScriptVM__Process);
+	DEF_OFF(CALL_GetRunningScriptThread);
 	DEF_OFF(VAR_ScrVM__ThreadPool);
 	DEF_OFF(VAR_ScrVM__ActiveThread);
 	DEF_OFF(FUNC_ScrVM__FindNativeAddress);
@@ -426,6 +427,8 @@ public:
 	DEF_OFF(IV_Func__DeletePedTaskJump);
 	DEF_OFF(IV_FUNC__TaskPedJump);
 	DEF_OFF(IV_Func__MovePedToPositionInterpolated);
+
+	DEF_OFF(VAR_GameWindow);
 };
 
 #endif

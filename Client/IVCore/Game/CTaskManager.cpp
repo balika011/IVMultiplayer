@@ -12,7 +12,7 @@
 
 CTaskManager::CTaskManager()
 {
-	;//
+	;
 }
 
 CTaskManager::~CTaskManager()

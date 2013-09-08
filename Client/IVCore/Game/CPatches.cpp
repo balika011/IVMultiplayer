@@ -19,55 +19,16 @@ _declspec(naked) void CTaskSimpleStartVehicle__Process()
 	_asm retn 4;
 }
 
-const char TBOGT[] = "<ini>\n"
-			"\t<device>e2</device>\n"
-			"\t<content>\n"
-				"\t\t<name>The Ballad of Gay Tony</name>\n"
-				"\t\t<id>3</id>\n"
-				"\t\t<audiometadata>e2_radio.xml</audiometadata>\n"
-				"\t\t<enabled />\n"
-			"\t</content>\n"
-			"\t<content>\n"
-				"\t\t<name>The Ballad of Gay Tony</name>\n"
-				"\t\t<id>4</id>\n"
-				"\t\t<episode>1</episode>\n"
-				"\t\t<datfile>content.dat</datfile>\n"
-				"\t\t<audiometadata>e2_audio.xml</audiometadata>\n"
-				"\t\t<loadingscreens>pc/textures/loadingscreens.wtd</loadingscreens>\n"
-				"\t\t<loadingscreensdat>common\\data\\loadingscreens.dat</loadingscreensdat>\n"
-				"\t\t<loadingscreensingame>pc/textures/loadingscreens_ingame.wtd</loadingscreensingame>\n"
-				"\t\t<loadingscreensingamedat>common\\data\\loadingscreens_ingame.dat</loadingscreensingamedat>\n"
-				"\t\t<texturepath>pc/textures/</texturepath>\n"
-				"\t\t<!-- <enabled /> -->\n"
-			"\t</content>\n"
-		"</ini>\n";
-
-const char xml[] = "ivmp.xml";
 void CPatches::Initialize()
 {
-	char szInstallDirectory[MAX_PATH];
-	if (SharedUtility::ReadRegistryString(HKEY_LOCAL_MACHINE, DEFAULT_REGISTRY_GAME_DIRECTORY, "InstallFolder", NULL, szInstallDirectory, sizeof(szInstallDirectory)) && SharedUtility::Exists(szInstallDirectory)) {
-		ofstream myfile;
-		myfile.open(CString("%s\\TBoGT\\%s", szInstallDirectory, xml).Get());
-		myfile << TBOGT;
-		myfile.close();
-
-	}
-
-	// Patch setup files
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B4A0E, (DWORD) xml);
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x8B3DAC, (DWORD) xml);
-
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x81A789, g_pCore->GetBase() + 0xD5C91C);//TLAD logo to EFLC logo
-	*(BYTE *) (g_pCore->GetBase() + 0x81A7C8) = 2; //Disable TLAD in main menu
-
-	CPatcher::InstallPushPatch(g_pCore->GetBase() + 0x81A79A, g_pCore->GetBase() + 0xD5C910); //TBoGT logo to IV logo
-
+#ifdef EFLC
+	//CPatcher::InstallNopPatch(g_pCore->GetBase() + 0x8B39FA, 8); //load IV, but this made crash. :(
+#endif
 	// Skip main menu #1
-	/**(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
+	*(BYTE *) COffsets::IV_Hook__PatchUnkownByte1 = 0xE0; //???
 
 	// Skip main menu #2
-	CPatcher::InstallJmpPatch(COffsets::CGame_Process__Sleep, COffsets::CGame_Process_InitialiseRageGame);*/
+	CPatcher::InstallJmpPatch(COffsets::CGame_Process__Sleep, COffsets::CGame_Process_InitialiseRageGame);
 
 	// Return at start of CTaskSimplePlayRandomAmbients::ProcessPed (Disable random ambient animations)
 	*(DWORD *)COffsets::IV_Hook__PatchRandomTasks = 0x900004C2;
@@ -170,8 +131,5 @@ void CPatches::Initialize()
     */
     CPatcher::InstallRetnPatch(COffsets::IV_Hook__PatchEnableAndFixVehicleModels);
 
-	*(BYTE *)COffsets::IV_Hook__PatchUnkownByte1 = 0xE0;
-
-	// Allow remote desktop connections pff
-	CPatcher::InstallJmpPatch((g_pCore->GetBase() + 0x405D67), (g_pCore->GetBase() + 0x405D6E), 1);
+	//CPatcher::InstallJmpPatch((g_pCore->GetBaseAddress() + 0x8589D3), (g_pCore->GetBaseAddress() + 0x859E25));
 }

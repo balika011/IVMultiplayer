@@ -98,6 +98,11 @@ bool CClientCommands::HandleUserInput(std::string strCommand, std::string strPar
 		}
 		return true;
 	}
+	else if(strCommand == "spawn")
+	{
+		g_pCore->GetGame()->OnClientReadyToGamePlay();
+		return true;
+	}
 	else if(strCommand == "engine") 
 	{
 		if(g_pCore->GetGame()->GetLocalPlayer()->GetVehicleEntity() != NULL)
@@ -281,10 +286,6 @@ bool CClientCommands::HandleUserInput(std::string strCommand, std::string strPar
 		unsigned int uiBlip;
 		CIVScript_NativeInvoke::Invoke<unsigned int>(CIVScript::NATIVE_ADD_BLIP_FOR_COORD, 0, 0, 0,&uiBlip); 
 		CIVScript_NativeInvoke::Invoke<unsigned int>(CIVScript::NATIVE_CHANGE_BLIP_SPRITE, 10);
-	}
-	else if(strCommand == "numberplate")
-	{
-		g_pCore->GetChat()->Output("FAIL");
 	}
 	return false;
 }

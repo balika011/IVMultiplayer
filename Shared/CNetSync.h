@@ -67,10 +67,6 @@ struct sNetwork_Sync_Entity_Player
 	CVector3		vecShotAtCoordinates;
 	CVector3		vecShotAtTarget;
 	CVector3		vecLookAtCoordinates;
-	/*Matrix34		pWeaponCameraA;
-	Matrix34		pWeaponCameraB;
-	Matrix34		pWeaponCameraC;
-	*/
 	}				sWeaponData;
 };
 

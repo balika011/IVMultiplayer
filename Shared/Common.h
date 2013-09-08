@@ -83,7 +83,7 @@ using namespace std; // Conflicts with string(std::string) in network stuff
 #define NETWORK_VERSION 0x1
 
 // Mod version string
-#define MOD_VERSION_STRING "1.0.0 DEV ft. Episodes from Liberty City"
+#define MOD_VERSION_STRING "1.0.0 DEV"
 
 // Version identifiers
 #define VERSION_IDENTIFIER MOD_NAME " " MOD_VERSION_STRING DEBUG_IDENTIFIER " [" __DATE__ ", " __TIME__ "]"
@@ -117,7 +117,8 @@ using namespace std; // Conflicts with string(std::string) in network stuff
 
 // Basic Names
 #define _DEV
-//#define CHEAP_RELEASE
+#define CHEAP_RELEASE
+#define EFLC
 #define MOD_NAME "IV:Multiplayer"
 #define MOD_SHORT_NAME "IVMP"
 #define MOD_SHORT_NAME_ILLEGAL "IV:MP"
@@ -129,14 +130,23 @@ using namespace std; // Conflicts with string(std::string) in network stuff
 #define GAME_DIRECTORY "GrandTheftAutoDirectory"
 #define MP_START_EXECUTABLE "LaunchIVMultiplayer.exe"
 #define MP_GET_GAME_READY_EXECUTABLE "IVGameReady.exe"
+#ifndef EFLC
+#define GAME_START_EXECUTABLE "LaunchGTAIV.exe"
+#define GAME_DEFAULT_EXECUTABLE "GTAIV.exe"
+#else
 #define GAME_START_EXECUTABLE "LaunchEFLC.exe"
 #define GAME_DEFAULT_EXECUTABLE "EFLC.exe"
+#endif
 #define SHORT_URI_LAUNCH_1 "ivmp://"
 #define SHORT_URI_LAUNCH_2 "ivmultiplayer://"
 #define SHORT_URI_LAUNCH_3 "ivmp"
 #define SHORT_URI_LAUNCH_4 "ivmultiplayer"
 #define SHORT_COMMANDLINE_LAUNCH_1 "-ivmp"
+#ifndef EFLC
+#define DEFAULT_REGISTRY_GAME_DIRECTORY "Software\\Rockstar Games\\Grand Theft Auto IV"
+#else
 #define DEFAULT_REGISTRY_GAME_DIRECTORY "Software\\Rockstar Games\\EFLC"
+#endif
 
 // Library Exports
 #ifdef EXPORT

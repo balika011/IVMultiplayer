@@ -144,7 +144,7 @@ void CCore::OnGameLoad()
 	if(IsGameLoaded())
 		return;
 
-	CLogFile::Print(__FUNCTION__);
+	PRINT_FUNCTION
 
 	// Initialize game instance & respawn local player
 	GetGame()->Initialise();

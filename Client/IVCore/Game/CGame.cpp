@@ -404,7 +404,7 @@ bool CGame::CheckInstances(bool bInitialised)
 
 HWND CGame::GetGameWindow()
 {
-	return (*(HWND *)(g_pCore->GetBase() + 0x1849DD4));
+	return (*(HWND *) COffsets::VAR_GameWindow);
 }
 
 void CGame::ThrowInternalException(DWORD dwAddress, DWORD dwExceptionType)

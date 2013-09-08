@@ -95,25 +95,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// Wait a half second ;)
 	Sleep(500);
 
-	// Create game-ready process
-	PROCESS_INFORMATION ProcessInfo = PROCESS_INFORMATION();
-	STARTUPINFO StartupInfo;
-	ZeroMemory(&StartupInfo, sizeof(StartupInfo));
-	StartupInfo.cb = sizeof StartupInfo;
-
-	char * szPath = new char[MAX_PATH];
-	sprintf(szPath,CString("%s"MP_GET_GAME_READY_EXECUTABLE,SharedUtility::GetExePath()));
-
-	// Check if IVGameReady.exe exists
-	if(!SharedUtility::Exists(SharedUtility::GetAbsolutePath(MP_GET_GAME_READY_EXECUTABLE).Get()))
-		return ShowMessageBox("Failed to find "MP_GET_GAME_READY_EXECUTABLE". Cannot launch "MOD_NAME".");
-
-	if(!CreateProcess(szPath, NULL, NULL, NULL, FALSE, 0, NULL, FALSE, &StartupInfo, &ProcessInfo))
-		return ShowMessageBox("Failed to start "MP_GET_GAME_READY_EXECUTABLE". Cannot launch "MOD_NAME".");
-
-	// Wait for the process
-	WaitForSingleObject(ProcessInfo.hProcess, INFINITE);
-
 	// Get the full path to LaunchGTAIV.exe
 	CString strApplicationPath("%s\\"GAME_START_EXECUTABLE, szInstallDirectory);
 

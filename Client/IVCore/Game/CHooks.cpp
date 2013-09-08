@@ -15,9 +15,6 @@
 #include "CContextData.h"
 #include <SharedUtility.h>
 #include "CGameFuncs.h"
-#include <IV/CIVScript_FunctionInvoke.h>
-#include <IV/CIVScriptEnums.h>
-#include <IV/CIVScript_FunctionList.h>
 
 extern	CCore	* g_pCore;
 IVTask       * ___pTask = NULL;
@@ -76,24 +73,36 @@ _declspec(naked) void CTask__Destructor_Hook()
 
 void RemoveInitialLoadingScreens()
 {
-	int iLoadScreens = COffsets::VAR_NumLoadingScreens;
-	int iLoadScreenType = COffsets::VAR_FirstLoadingScreenType;
-	int iLoadScreenDuration = COffsets::VAR_FirstLoadingScreenDuration;
+	DWORD iLoadScreens = COffsets::VAR_NumLoadingScreens;
+	DWORD iLoadScreenType = COffsets::VAR_FirstLoadingScreenType;
+	DWORD iLoadScreenDuration = COffsets::VAR_FirstLoadingScreenDuration;
 
-	for(int i = 0; i < *(int *)iLoadScreens; ++i)
+	/*for(int i = 0; i < *(int *)iLoadScreens; ++i)
 	{
-		if(i < 4)
-		{
-			*(DWORD *)(iLoadScreenType + i * 400) = 0;
-			*(DWORD *)(iLoadScreenDuration + i * 400) = 0;
-		}
-	}
+		*(DWORD *)(iLoadScreenType + i * 400) = 0;
+		*(DWORD *)(iLoadScreenDuration + i * 400) = 0;
+	}*/
 
-	*(DWORD *)(iLoadScreenDuration + 400) = 5000; // load directx
-	*(DWORD *)(iLoadScreenDuration + 1600) = 5000; // logo screen
+	*(DWORD *) (iLoadScreenType) = 0;
+	*(DWORD *) (iLoadScreenDuration) = 0;
+
+	*(DWORD *) (iLoadScreenType + 400) = 0;
+	*(DWORD *) (iLoadScreenDuration + 400) = 0;
+	//*(DWORD *) (iLoadScreenDuration + 400) = 5000; // load directx
+
+	*(DWORD *) (iLoadScreenType + 800) = 0;
+	*(DWORD *) (iLoadScreenDuration + 800) = 0;
+
+	*(DWORD *) (iLoadScreenType + 1200) = 0;
+	*(DWORD *) (iLoadScreenDuration + 1200) = 0;
+
+	//*(DWORD *) (iLoadScreenType + 1600) = 0;
+	//*(DWORD *) (iLoadScreenDuration + 1600) = 0;
+	*(DWORD *) (iLoadScreenDuration + 1600) = 5000; // logo screen
 }
 
-IVPlayerInfo * __cdecl GetPlayerInfoFromIndex(unsigned int uiIndex)
+
+IVPlayerInfo * GetPlayerInfoFromIndex(unsigned int uiIndex)
 {
 	pReturnedPlayerInfo = g_pCore->GetGame()->GetPools()->GetPlayerInfoFromIndex(0);
 
@@ -218,7 +227,7 @@ _declspec(naked) void CFunctionRetnPatch()
 	}
 }
 
-_declspec(naked) void CRASH_625F15_HOOK()
+_declspec(naked) void CRASH_CRASH_HOOK_1()
 {
 	_asm
 	{
@@ -243,7 +252,7 @@ keks:
 		pushad
 	}
 
-	g_pCore->GetChat()->Output("Prevent crash at 0x625F15");
+	g_pCore->GetChat()->Output("Prevent crash at 0x%p", COffsets::IV_Hook__UnkownPatch2);
 
 	_asm
 	{
@@ -369,8 +378,9 @@ void CHooks::Intialize()
 	CPatcher::InstallJmpPatch(COffsets::IV_Hook__UnkownPatch1, (COffsets::IV_Hook__UnkownPatch1 + 0x40));
 	
 	// this disables a call to a destructor of a member in rageResourceCache [field_244] 
-	CPatcher::InstallJmpPatch(COffsets::IV_Hook__UnkownPatch2, (DWORD)CRASH_625F15_HOOK);
+	CPatcher::InstallJmpPatch(COffsets::IV_Hook__UnkownPatch2, (DWORD) CRASH_CRASH_HOOK_1);
 
+#ifdef EFLC //TODO move offsets to COffsets
 	// Disable wanted circles on the minimap(we have no cops which are following you atm ^^)
 	*(BYTE *)(g_pCore->GetBase() + 0x83C216) = 0xEB;
 	*(BYTE *)(g_pCore->GetBase() + 0x83BFE0) = 0xC3;
@@ -389,5 +399,6 @@ void CHooks::Intialize()
 	*(DWORD *)(g_pCore->GetBase() + 0xFEA8EC) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
 	*(DWORD *)(g_pCore->GetBase() + 0xFEA8F0) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
 	*(DWORD *)(g_pCore->GetBase() + 0xFEA8F4) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
+#endif
 }
 
