@@ -429,6 +429,9 @@ public:
 	DEF_OFF(IV_Func__MovePedToPositionInterpolated);
 
 	DEF_OFF(VAR_GameWindow);
+
+	DEF_OFF(ARRAY_ModelInfos);
+	DEF_OFF(ARRAY_WeaponInfos);
 };
 
 #endif

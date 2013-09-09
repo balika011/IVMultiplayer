@@ -13,7 +13,6 @@
 #include <Game/IVEngine/CIVHud.h>
 #include <Game/IVEngine/CIVWeather.h>
 #include <Game/IVEngine/CIVModelInfo.h>
-#include <Game/CEFLCSupport.h>
 #include <General/CException.h>
 #include <Game/CGameFiles.h>
 #include <IV/CIVScript.h>
@@ -42,7 +41,6 @@ CIVModelInfo				CGame::m_modelInfos[NUM_ModelInfos];
 CIVWeaponInfo				CGame::m_weaponInfos[NUM_WeaponInfos];
 CIVStreaming				*CGame::m_pStream = 0;
 CTrafficLights				*CGame::m_pTrafficLights = 0;
-CString						CGame::m_strEFLCDirectory = 0;
 HWND						CGame::m_hwndGameWindow = 0;
 IVManagement				*CGame::m_pManagement = 0;
 InternalThread				CGame::m_Threads[254];
@@ -112,15 +110,11 @@ void CGame::Setup()
 	for(int i = 0; i < NUM_WeaponInfos; i++)
 	{
 		m_weaponInfos[i].SetType((eWeaponType)i);
-		m_weaponInfos[i].SetWeaponInfo((IVWeaponInfo *)((g_pCore->GetBase() + ARRAY_WeaponInfos) + (i * sizeof(IVWeaponInfo))));
+		m_weaponInfos[i].SetWeaponInfo((IVWeaponInfo *)(COffsets::ARRAY_WeaponInfos + (i * sizeof(IVWeaponInfo))));
 	}
 	
 	// Hide the chat
 	g_pCore->GetChat()->SetVisible(false);
-	
-	// Setup the EFLC support
-	CEFLCSupport::SpecificSupport(true, true, true, true, true);
-	CEFLCSupport::InstallSupport();
 }
 
 void CGame::Initialise()
@@ -344,12 +338,6 @@ void CGame::OnClientReadyToGamePlay()
 	g_pCore->GetTimeManagementInstance()->SetMinuteDuration(60000); // 60 seconds, default
 }
 
-void CGame::OnClientPastGameJoin()
-{
-	// Preload world stuff
-	CEFLCSupport::InstallPreGameLoad();
-}
-
 CIVModelInfo * CGame::GetModelInfo(int iModelIndex)
 {
 	// Loop through all ModelInfo array indexes and return if a match was found
@@ -467,7 +455,6 @@ void CGame::SetupGame()
 
 void CGame::RenderUIElements()
 {
-	;
 }
 
 BYTE CGame::CreateInternalThread(DWORD dwStartAddress, LPVOID lpvoidParameters, signed int siThreadId, int iPriority, const char * szThreadName, const char *szComment)

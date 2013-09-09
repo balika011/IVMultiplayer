@@ -81,8 +81,6 @@ private:
 	static CCharacterManager			*m_pCharacterManager;
 	static CTrafficLights				*m_pTrafficLights;
 
-	static CString						m_strEFLCDirectory;
-	bool								m_bUsingEFLCContent;
 	static HWND							m_hwndGameWindow;
 	static IVManagement					*m_pManagement;
 
@@ -97,7 +95,6 @@ public:
 	void								PrepareWorld();
 	static void							OnEnvironmentStartUp(bool bForce = false);
 	static void							OnClientReadyToGamePlay();
-	static void							OnClientPastGameJoin();
 	static void							Setup();
 	static void							RenderRAGEScripts();
 	static void							RenderUIElements();
@@ -127,12 +124,6 @@ public:
 	CTrafficLights						*GetTrafficLights() { return m_pTrafficLights; }
 	CIVStreaming						*GetStreaming() { return m_pStream; }
 	IVManagement						*GetIVManagement() { return m_pManagement; }
-
-	CString								GetEFLCDirectory() { return m_strEFLCDirectory; }
-	inline bool							IsUsingEFLCContent()
-	{
-		return m_bUsingEFLCContent;
-	}
 
 	HWND								GetGameWindow();
 	inline HWND							GetWindow() { return m_hwndGameWindow; };

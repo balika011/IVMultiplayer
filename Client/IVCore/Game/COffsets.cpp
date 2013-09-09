@@ -399,6 +399,9 @@ INIT_OFF(IV_Func__MovePedToPositionInterpolated);
 
 INIT_OFF(VAR_GameWindow);
 
+INIT_OFF(ARRAY_ModelInfos);
+INIT_OFF(ARRAY_WeaponInfos);
+
 enum ePATCH_SIG
 {
 	IV_101 = 0x831F7518,
@@ -819,6 +822,9 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(IV_Func__MovePedToPositionInterpolated, 0xBF6060); // done
 
 			SET_OFF(VAR_GameWindow, 0x1849DD4); //done
+
+			SET_OFF(ARRAY_ModelInfos, 0x157D310); //done
+			SET_OFF(ARRAY_WeaponInfos, 0x1519370); //done
 			break;
 		}
 		case IV_107:
@@ -1216,6 +1222,9 @@ void COffsets::Initialize(unsigned int uiBase)
 			SET_OFF(IV_Func__MovePedToPositionInterpolated, 0xB87480);
 
 			SET_OFF(VAR_GameWindow, 0x18AAD44);
+
+			SET_OFF(ARRAY_ModelInfos, 0x15F73B0); //done
+			SET_OFF(ARRAY_WeaponInfos, 0x1540A20); //done
 			break;
 		default:
 			break;

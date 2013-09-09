@@ -493,7 +493,16 @@ CIVScriptInstance civScripts[] = {
 	{466, "yusuf1cleanup", 0x435678FC},
 	{467, "yusuf2", 0x67B650AC},
 	{468, "yusuf3", 0x456F0C1E},
-	{469, "yusuf4", 0x36966E4D},
+	{469, "yusuf4", 0x36966E4D },
+	{470, "ambmemorial", 0x58EB04B7},
+	{471, "e1stattracker", 0xADEE5028},
+	{472, "recurringloststats", 0x5380B1AD},
+	{473, "e1lostclubblips", 0xB1633A2D},
+	{474, "e1armwrestleblips", 0x29134D39},
+	{475, "remindermp", 0xAFE0FE65},
+	{476, "gangwarc", 0xDFEFC350},
+	{477, "racelauncher", 0x27F91A27},
+	{478, "e1rewards", 0x15D16726},
 };
 
 void CRageThread_Script_Process()
@@ -519,7 +528,7 @@ void CRageThread_Script_Process()
 bool g_startupProcessed = false;
 bool bPostStartupLoaded = false;
 
-int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDXp, int EDIp)
+int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *, int EDIp)
 {
 	bool bScriptFound = false;
 
@@ -696,7 +705,7 @@ int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDXp, int EDIp)
 	int ret = (*(int (__thiscall *)(sRAGETHREAD *, int)) thread->m_VFTable->Process)(thread, EDIp);
 
 	// Post Process our stuff
-	/*switch (thread->m_Context.ScriptHash)
+	switch (thread->m_Context.ScriptHash)
 	{
 	case 0x41D6F794:
 		{
@@ -805,7 +814,7 @@ int __fastcall CScriptVM__Process(sRAGETHREAD *thread, void *EDXp, int EDIp)
 			CIVScript::AllocateScriptToRandomPed("ambbusker", -1188246269, 100, 1);
 			break;
 		}
-	}*/
+	}
 
 	return ret;
 }

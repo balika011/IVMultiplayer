@@ -227,6 +227,11 @@ _declspec(naked) void CFunctionRetnPatch()
 	}
 }
 
+void logcrash(DWORD addr)
+{
+	g_pCore->GetChat()->Output(CString("Prevent crash at 0x%p", addr).Get());
+}
+
 _declspec(naked) void CRASH_CRASH_HOOK_1()
 {
 	_asm
@@ -252,7 +257,7 @@ keks:
 		pushad
 	}
 
-	g_pCore->GetChat()->Output("Prevent crash at 0x%p", COffsets::IV_Hook__UnkownPatch2);
+	logcrash(COffsets::IV_Hook__UnkownPatch2);
 
 	_asm
 	{
@@ -345,6 +350,8 @@ void CHooks::IncreasePoolSizes(int multi)
 	CPatcher::InstallJmpPatch(COffsets::IV_Hook__IncreasePoolSizes, (DWORD)CPool_hook);
 }
 
+DWORD favorite_star = (DWORD)"favorite_star";
+
 void CHooks::Intialize()
 {
 	// Hook CEpisodes::IsEpisodeAvaliable to use our own function
@@ -382,23 +389,10 @@ void CHooks::Intialize()
 
 #ifdef EFLC //TODO move offsets to COffsets
 	// Disable wanted circles on the minimap(we have no cops which are following you atm ^^)
-	*(BYTE *)(g_pCore->GetBase() + 0x83C216) = 0xEB;
-	*(BYTE *)(g_pCore->GetBase() + 0x83BFE0) = 0xC3;
+	/**(BYTE *)(g_pCore->GetBase() + 0x83C216) = 0xEB;
+	*(BYTE *)(g_pCore->GetBase() + 0x83BFE0) = 0xC3;*/
+#else
 
-	// Patch crosshair
-	CPatcher::Unprotect((g_pCore->GetBase() + 0xE35790), 13);
-	*(DWORD *)(g_pCore->GetBase() + 0xE35790) = 0x73706172;
-	*(DWORD *)(g_pCore->GetBase() + 0xE35790 + 0x4) = 0x6B6C6500;
-	*(DWORD *)(g_pCore->GetBase() + 0xE35790 + 0x8) = 0x00000000;
-	*(BYTE*)(g_pCore->GetBase() + 0xE35790 + 0x12) = 0x0;
-
-	// Patch icons to star
-	CPatcher::Unprotect((g_pCore->GetBase() + 0xFEA8E4), 20);
-	*(DWORD *)(g_pCore->GetBase() + 0xFEA8E4) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
-	*(DWORD *)(g_pCore->GetBase() + 0xFEA8E8) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
-	*(DWORD *)(g_pCore->GetBase() + 0xFEA8EC) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
-	*(DWORD *)(g_pCore->GetBase() + 0xFEA8F0) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
-	*(DWORD *)(g_pCore->GetBase() + 0xFEA8F4) = *(DWORD *)(g_pCore->GetBase() + 0xC9654C + 0x1);
 #endif
 }
 

@@ -14,17 +14,7 @@
 #include <Common.h>
 #endif
 
-#ifndef EFLC
-#define		ARRAY_ModelInfos				0x15F73B0 //IV
-#else
-#define		ARRAY_ModelInfos				0x157D310 //EFLC
-#endif
 #define		NUM_ModelInfos					31000
-#ifndef EFLC
-#define		ARRAY_WeaponInfos				0x1540A20 //IV
-#else
-#define		ARRAY_WeaponInfos				0x1519370 //EFLC
-#endif
 #define		NUM_WeaponInfos					60
 
 #define		MIN_INPUT_VALUE					0
