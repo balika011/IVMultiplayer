@@ -402,6 +402,8 @@ INIT_OFF(VAR_GameWindow);
 INIT_OFF(ARRAY_ModelInfos);
 INIT_OFF(ARRAY_WeaponInfos);
 
+INIT_OFF(SOL_Crash);
+
 enum ePATCH_SIG
 {
 	IV_101 = 0x831F7518,
@@ -825,6 +827,8 @@ void COffsets::Initialize(unsigned int uiBase)
 
 			SET_OFF(ARRAY_ModelInfos, 0x157D310); //done
 			SET_OFF(ARRAY_WeaponInfos, 0x1519370); //done
+
+			SET_OFF(SOL_Crash, 0xB3EE70); //done
 			break;
 		}
 		case IV_107:
@@ -1223,8 +1227,10 @@ void COffsets::Initialize(unsigned int uiBase)
 
 			SET_OFF(VAR_GameWindow, 0x18AAD44);
 
-			SET_OFF(ARRAY_ModelInfos, 0x15F73B0); //done
-			SET_OFF(ARRAY_WeaponInfos, 0x1540A20); //done
+			SET_OFF(ARRAY_ModelInfos, 0x15F73B0);
+			SET_OFF(ARRAY_WeaponInfos, 0x1540A20);
+
+			SET_OFF(SOL_Crash, 0xBC9010);
 			break;
 		default:
 			break;

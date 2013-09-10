@@ -432,6 +432,8 @@ public:
 
 	DEF_OFF(ARRAY_ModelInfos);
 	DEF_OFF(ARRAY_WeaponInfos);
+
+	DEF_OFF(SOL_Crash);
 };
 
 #endif

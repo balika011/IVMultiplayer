@@ -116,4 +116,7 @@ void CPatches::Initialize()
     CPatcher::InstallRetnPatch(COffsets::IV_Hook__PatchEnableAndFixVehicleModels);
 
 	//CPatcher::InstallJmpPatch((g_pCore->GetBaseAddress() + 0x8589D3), (g_pCore->GetBaseAddress() + 0x859E25));
+
+	//fix crash near Statue of Liberty
+	CPatcher::InstallJmpPatch(COffsets::SOL_Crash, COffsets::SOL_Crash + 67);
 }
