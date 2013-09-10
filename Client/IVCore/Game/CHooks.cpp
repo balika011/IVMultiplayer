@@ -77,7 +77,7 @@ void RemoveInitialLoadingScreens()
 	DWORD iLoadScreenType = COffsets::VAR_FirstLoadingScreenType;
 	DWORD iLoadScreenDuration = COffsets::VAR_FirstLoadingScreenDuration;
 
-	for (int i = 0; i < *(int *) iLoadScreens; ++i)
+	for (int i = 0; i < *(int *) iLoadScreens && i < 4; ++i)
 	{
 		*(DWORD *) (iLoadScreenType + i * 400) = 0;
 		*(DWORD *) (iLoadScreenDuration + i * 400) = 0;

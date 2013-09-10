@@ -433,24 +433,7 @@ void CGame::SetupGame()
 {
 	g_pCore->GetGame()->OnClientReadyToGamePlay();
 	g_pCore->GetGame()->GetLocalPlayer()->SetModel(0);
-	g_pCore->GetGame()->GetLocalPlayer()->SetMoney(10000);
-
-	int iVehicleType = 141;
-
-	CVector3 vecCreatePos; 
-	g_pCore->GetGame()->GetLocalPlayer()->GetPosition(vecCreatePos);
-	vecCreatePos.fX += 4;
-	vecCreatePos.fY += 1;
-
-	CVehicleEntity * pVehicle = new CVehicleEntity(iVehicleType,vecCreatePos,0.0f,0,0,0,0);
-	
-	CHECK_PTR_VOID(pVehicle);
-
-	// Add our vehicle
-	g_pCore->GetGame()->GetVehicleManager()->Add(pVehicle);
-	pVehicle->SetId(g_pCore->GetGame()->GetVehicleManager()->FindFreeSlot());
-	pVehicle->Create();
-	pVehicle->SetPosition(vecCreatePos);
+	g_pCore->GetGame()->GetLocalPlayer()->SetMoney(0);
 }
 
 void CGame::RenderUIElements()
