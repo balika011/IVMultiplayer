@@ -77,28 +77,13 @@ void RemoveInitialLoadingScreens()
 	DWORD iLoadScreenType = COffsets::VAR_FirstLoadingScreenType;
 	DWORD iLoadScreenDuration = COffsets::VAR_FirstLoadingScreenDuration;
 
-	/*for(int i = 0; i < *(int *)iLoadScreens; ++i)
+	for (int i = 0; i < *(int *) iLoadScreens; ++i)
 	{
-		*(DWORD *)(iLoadScreenType + i * 400) = 0;
-		*(DWORD *)(iLoadScreenDuration + i * 400) = 0;
-	}*/
+		*(DWORD *) (iLoadScreenType + i * 400) = 0;
+		*(DWORD *) (iLoadScreenDuration + i * 400) = 0;
+	}
 
-	*(DWORD *) (iLoadScreenType) = 0;
-	*(DWORD *) (iLoadScreenDuration) = 0;
-
-	*(DWORD *) (iLoadScreenType + 400) = 0;
-	*(DWORD *) (iLoadScreenDuration + 400) = 0;
-	//*(DWORD *) (iLoadScreenDuration + 400) = 5000; // load directx
-
-	*(DWORD *) (iLoadScreenType + 800) = 0;
-	*(DWORD *) (iLoadScreenDuration + 800) = 0;
-
-	*(DWORD *) (iLoadScreenType + 1200) = 0;
-	*(DWORD *) (iLoadScreenDuration + 1200) = 0;
-
-	//*(DWORD *) (iLoadScreenType + 1600) = 0;
-	//*(DWORD *) (iLoadScreenDuration + 1600) = 0;
-	*(DWORD *) (iLoadScreenDuration + 1600) = 5000; // logo screen
+	CPatcher::InstallNopPatch(COffsets::FUNC_RemoveInitialLoadingScreens, 5);
 }
 
 
